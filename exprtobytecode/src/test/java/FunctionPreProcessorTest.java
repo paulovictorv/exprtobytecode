@@ -1,6 +1,7 @@
+import exprtob.exception.FunctionParserException;
+import exprtob.exception.NotValidIdException;
+import exprtob.parser.FunctionPreProcessor;
 import org.junit.Test;
-import parser.FunctionPreProcessor;
-import parser.exception.NotValidIdException;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -10,39 +11,39 @@ import static org.fest.assertions.Assertions.assertThat;
 public class FunctionPreProcessorTest {
 
     @Test
-    public void shouldChangeVariableNames() throws NotValidIdException {
+    public void shouldChangeVariableNames() throws FunctionParserException {
         String function = "x+y";
         FunctionPreProcessor preProc = new FunctionPreProcessor();
-        String postProcessed = preProc.preProcess(function);
+        String postProcessed = preProc.parse(function);
 
-        assertThat(postProcessed).isEqualTo("$1+$2");
+        assertThat(postProcessed).isEqualTo("params[0]+params[1]");
     }
 
     @Test
-    public void shouldOnlyChangeOnce() throws NotValidIdException {
+    public void shouldOnlyChangeOnce() throws FunctionParserException {
         String function = "x+x";
         FunctionPreProcessor preProc = new FunctionPreProcessor();
-        String postProcessed = preProc.preProcess(function);
+        String postProcessed = preProc.parse(function);
 
-        assertThat(postProcessed).isEqualTo("$1+$1");
+        assertThat(postProcessed).isEqualTo("params[0]+params[0]");
     }
 
     @Test(expected = NotValidIdException.class)
-    public void shouldDetectInvalidId() throws NotValidIdException {
+    public void shouldDetectInvalidId() throws FunctionParserException {
         String function = "x+1x";
 
         FunctionPreProcessor preProc = new FunctionPreProcessor();
 
-        preProc.preProcess(function);
+        preProc.parse(function);
     }
 
     @Test
-    public void shouldIgnoreMathUtilIdentifiers() throws NotValidIdException {
+    public void shouldIgnoreMathUtilIdentifiers() throws FunctionParserException {
         String function = "sqrt(x+y)";
         FunctionPreProcessor preProc = new FunctionPreProcessor();
-        String postProcessed = preProc.preProcess(function);
+        String postProcessed = preProc.parse(function);
 
-        assertThat(postProcessed).isEqualTo("sqrt($1+$2)");
+        assertThat(postProcessed).isEqualTo("sqrt(params[0]+params[1])");
     }
 
 

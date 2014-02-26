@@ -1,6 +1,10 @@
 *.class
 *.log
 
+.idea
+src/main/main.iml
+src/test/test.iml
+
 # sbt specific
 dist/*
 target/

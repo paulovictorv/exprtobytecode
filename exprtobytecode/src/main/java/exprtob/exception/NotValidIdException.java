@@ -1,4 +1,4 @@
-package parser.exception;
+package exprtob.exception;
 
 /**
  * Created by paulovvmelo on 23/02/14.
